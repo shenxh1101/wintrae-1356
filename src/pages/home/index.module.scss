@@ -1,0 +1,254 @@
+@use '@/styles/variables.scss' as *;
+
+.homePage {
+  min-height: 100vh;
+  background: $color-bg-page;
+  padding-bottom: 120rpx;
+}
+
+.mapSection {
+  position: relative;
+  width: 100%;
+  height: 500rpx;
+  background: linear-gradient(135deg, #e0f2fe 0%, #d1fae5 100%);
+  overflow: hidden;
+}
+
+.mapPlaceholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.mapIcon {
+  font-size: 80rpx;
+  margin-bottom: $spacing-md;
+}
+
+.mapText {
+  font-size: $font-size-md;
+  color: $color-text-secondary;
+}
+
+.mapOverlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: $spacing-lg $spacing-lg $spacing-xl;
+  background: linear-gradient(transparent, rgba(0,0,0,0.3));
+}
+
+.locationInfo {
+  display: flex;
+  align-items: center;
+  color: $color-text-white;
+  font-size: $font-size-sm;
+}
+
+.locationIcon {
+  margin-right: $spacing-xs;
+}
+
+.startButtonContainer {
+  position: relative;
+  margin-top: -60rpx;
+  padding: 0 $page-padding;
+  z-index: 10;
+}
+
+.startButton {
+  @include button-reset;
+  width: 100%;
+  height: 120rpx;
+  background: $gradient-primary;
+  border-radius: $radius-xl;
+  box-shadow: 0 8rpx 24rpx rgba(7, 193, 96, 0.3);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: $color-text-white;
+  transition: all $transition-base;
+
+  &:active {
+    transform: scale(0.98);
+    opacity: 0.9;
+  }
+}
+
+.startButtonTitle {
+  font-size: $font-size-xl;
+  font-weight: $font-weight-semibold;
+  margin-bottom: 4rpx;
+}
+
+.startButtonSubtitle {
+  font-size: $font-size-sm;
+  opacity: 0.9;
+}
+
+.section {
+  padding: $spacing-xl $page-padding 0;
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $spacing-md;
+}
+
+.sectionTitle {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+}
+
+.sectionMore {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+}
+
+.quickActions {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: $spacing-lg;
+}
+
+.quickAction {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: $spacing-lg $spacing-md;
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-card;
+  margin: 0 $spacing-xs;
+  transition: all $transition-base;
+
+  &:first-child {
+    margin-left: 0;
+  }
+
+  &:last-child {
+    margin-right: 0;
+  }
+
+  &:active {
+    transform: scale(0.96);
+    opacity: 0.9;
+  }
+}
+
+.actionIcon {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: $radius-lg;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36rpx;
+  margin-bottom: $spacing-sm;
+}
+
+.actionIconGreen {
+  background: rgba(7, 193, 96, 0.1);
+  color: $color-primary;
+}
+
+.actionIconBlue {
+  background: rgba(59, 130, 246, 0.1);
+  color: $color-info;
+}
+
+.actionIconPurple {
+  background: rgba(139, 92, 246, 0.1);
+  color: $color-supply;
+}
+
+.actionLabel {
+  font-size: $font-size-sm;
+  color: $color-text-primary;
+  font-weight: $font-weight-medium;
+}
+
+.statsRow {
+  display: flex;
+  gap: $spacing-md;
+  margin-bottom: $spacing-lg;
+}
+
+.statCard {
+  flex: 1;
+}
+
+.routeList {
+  // Additional styles if needed
+}
+
+.supplyDangerSection {
+  margin-top: $spacing-lg;
+}
+
+.markersGrid {
+  display: flex;
+  gap: $spacing-md;
+}
+
+.markerCard {
+  flex: 1;
+  padding: $spacing-md;
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-card;
+}
+
+.markerHeader {
+  display: flex;
+  align-items: center;
+  margin-bottom: $spacing-sm;
+}
+
+.markerIcon {
+  width: 48rpx;
+  height: 48rpx;
+  border-radius: $radius-md;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24rpx;
+  margin-right: $spacing-sm;
+}
+
+.markerIconSupply {
+  background: rgba(139, 92, 246, 0.1);
+  color: $color-supply;
+}
+
+.markerIconDanger {
+  background: rgba(239, 68, 68, 0.1);
+  color: $color-danger;
+}
+
+.markerTitle {
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+}
+
+.markerCount {
+  font-size: $font-size-xxl;
+  font-weight: $font-weight-bold;
+  color: $color-text-primary;
+}
+
+.markerLabel {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+}

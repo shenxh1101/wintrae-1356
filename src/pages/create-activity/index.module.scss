@@ -1,0 +1,220 @@
+@use '@/styles/variables.scss' as *;
+
+.createActivityPage {
+  min-height: 100vh;
+  background: $color-bg-page;
+  padding-bottom: 140rpx;
+}
+
+.section {
+  margin: $spacing-lg $page-padding 0;
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  box-shadow: $shadow-card;
+}
+
+.sectionTitle {
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  display: flex;
+  align-items: center;
+  margin-bottom: $spacing-md;
+}
+
+.sectionIcon {
+  margin-right: $spacing-sm;
+}
+
+.formItem {
+  margin-bottom: $spacing-lg;
+  position: relative;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.formLabel {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  margin-bottom: $spacing-sm;
+  display: block;
+}
+
+.formInput {
+  width: 100%;
+  height: 80rpx;
+  padding: 0 $spacing-md;
+  background: $color-bg-sheet;
+  border-radius: $radius-md;
+  font-size: $font-size-md;
+  color: $color-text-primary;
+  box-sizing: border-box;
+}
+
+.formTextarea {
+  width: 100%;
+  height: 200rpx;
+  padding: $spacing-md;
+  background: $color-bg-sheet;
+  border-radius: $radius-md;
+  font-size: $font-size-md;
+  color: $color-text-primary;
+  box-sizing: border-box;
+  line-height: 1.5;
+}
+
+.formHint {
+  position: absolute;
+  right: $spacing-sm;
+  bottom: $spacing-sm;
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+}
+
+.formSelect {
+  height: 80rpx;
+  padding: 0 $spacing-md;
+  background: $color-bg-sheet;
+  border-radius: $radius-md;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.selectValue {
+  font-size: $font-size-md;
+  color: $color-text-primary;
+
+  &.placeholder {
+    color: $color-text-tertiary;
+  }
+}
+
+.selectArrow {
+  font-size: $font-size-lg;
+  color: $color-text-tertiary;
+  font-weight: $font-weight-medium;
+}
+
+.formRow {
+  display: flex;
+  gap: $spacing-md;
+}
+
+.stepper {
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+}
+
+.stepperBtn {
+  width: 64rpx;
+  height: 64rpx;
+  background: $color-bg-sheet;
+  border-radius: $radius-md;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: $font-size-lg;
+  color: $color-text-primary;
+
+  &.stepperDisabled {
+    color: $color-text-disabled;
+  }
+}
+
+.stepperValue {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  min-width: 100rpx;
+  text-align: center;
+}
+
+.optionGroup {
+  display: flex;
+  gap: $spacing-sm;
+}
+
+.optionItem {
+  flex: 1;
+  height: 72rpx;
+  background: $color-bg-sheet;
+  border: 2rpx solid transparent;
+  border-radius: $radius-md;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  transition: all $transition-fast;
+
+  &.optionActive {
+    background: rgba(7, 193, 96, 0.08);
+    font-weight: $font-weight-medium;
+  }
+}
+
+.paceGroup {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+}
+
+.paceItem {
+  padding: $spacing-md;
+  background: $color-bg-sheet;
+  border: 2rpx solid transparent;
+  border-radius: $radius-md;
+  transition: all $transition-fast;
+
+  &.paceActive {
+    border-color: $color-primary;
+    background: rgba(7, 193, 96, 0.06);
+  }
+}
+
+.paceLabel {
+  font-size: $font-size-md;
+  font-weight: $font-weight-medium;
+  color: $color-text-primary;
+  margin-bottom: 4rpx;
+  display: block;
+}
+
+.paceDesc {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+}
+
+.bottomBar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: $color-bg-card;
+  padding: $spacing-md $page-padding;
+  box-shadow: 0 -2rpx 12rpx rgba(0, 0, 0, 0.06);
+  z-index: 100;
+  padding-bottom: calc(#{$spacing-md} + env(safe-area-inset-bottom));
+}
+
+.submitButton {
+  @include button-reset;
+  width: 100%;
+  height: 96rpx;
+  background: $gradient-primary;
+  color: $color-text-white;
+  border-radius: $radius-button;
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  box-shadow: 0 4rpx 16rpx rgba(7, 193, 96, 0.25);
+
+  &:active {
+    transform: scale(0.98);
+    opacity: 0.9;
+  }
+}

@@ -1,0 +1,77 @@
+@use '@/styles/variables.scss' as *;
+
+.rideCard {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  overflow: hidden;
+  box-shadow: $shadow-card;
+  margin-bottom: $spacing-md;
+  transition: all $transition-base;
+
+  &:active {
+    transform: scale(0.98);
+    opacity: 0.9;
+  }
+
+  .cover {
+    width: 100%;
+    height: 260rpx;
+  }
+
+  .content {
+    padding: $spacing-lg;
+  }
+
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: $spacing-xs;
+  }
+
+  .title {
+    font-size: $font-size-lg;
+    font-weight: $font-weight-semibold;
+    color: $color-text-primary;
+    flex: 1;
+    @include text-ellipsis;
+  }
+
+  .date {
+    font-size: $font-size-sm;
+    color: $color-text-tertiary;
+    flex-shrink: 0;
+    margin-left: $spacing-sm;
+  }
+
+  .routeName {
+    display: block;
+    font-size: $font-size-sm;
+    color: $color-text-secondary;
+    margin-bottom: $spacing-md;
+    @include text-ellipsis;
+  }
+
+  .stats {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .statItem {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+  }
+
+  .statValue {
+    font-size: $font-size-lg;
+    font-weight: $font-weight-semibold;
+    margin-bottom: 4rpx;
+  }
+
+  .statLabel {
+    font-size: $font-size-xs;
+    color: $color-text-tertiary;
+  }
+}

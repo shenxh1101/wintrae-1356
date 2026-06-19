@@ -1,0 +1,199 @@
+@use '@/styles/variables.scss' as *;
+
+.rideResultPage {
+  min-height: 100vh;
+  background: $color-bg-page;
+  padding-bottom: 120rpx;
+}
+
+.header {
+  background: $gradient-primary;
+  padding: $spacing-xl $page-padding $spacing-xxl;
+  text-align: center;
+  color: $color-text-white;
+}
+
+.title {
+  font-size: $font-size-xl;
+  font-weight: $font-weight-bold;
+  margin-bottom: $spacing-xs;
+}
+
+.subtitle {
+  font-size: $font-size-sm;
+  opacity: 0.9;
+}
+
+.mainStats {
+  background: $color-bg-card;
+  border-radius: $radius-xl;
+  margin: -60rpx $page-padding $spacing-lg;
+  padding: $spacing-xl;
+  box-shadow: $shadow-float;
+  position: relative;
+  z-index: 10;
+}
+
+.distanceStat {
+  text-align: center;
+  padding-bottom: $spacing-xl;
+  margin-bottom: $spacing-xl;
+  border-bottom: 1rpx solid $color-divider;
+}
+
+.distanceValue {
+  font-size: 80rpx;
+  font-weight: $font-weight-bold;
+  color: $color-primary;
+  line-height: 1;
+  margin-bottom: $spacing-xs;
+}
+
+.distanceUnit {
+  font-size: $font-size-md;
+  color: $color-text-secondary;
+}
+
+.statsGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-md;
+}
+
+.statItem {
+  flex: 1;
+  min-width: 40%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: $spacing-md;
+  background: $color-bg-page;
+  border-radius: $radius-md;
+}
+
+.statValue {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: 4rpx;
+}
+
+.statLabel {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+}
+
+.mapSection {
+  margin: 0 $page-padding $spacing-lg;
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  box-shadow: $shadow-card;
+}
+
+.sectionTitle {
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-md;
+}
+
+.mapPreview {
+  width: 100%;
+  height: 300rpx;
+  background: linear-gradient(135deg, #e0f2fe 0%, #d1fae5 100%);
+  border-radius: $radius-md;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.mapIcon {
+  font-size: 60rpx;
+  margin-bottom: $spacing-sm;
+}
+
+.mapText {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+}
+
+.infoSection {
+  margin: 0 $page-padding $spacing-lg;
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  box-shadow: $shadow-card;
+}
+
+.infoItem {
+  display: flex;
+  justify-content: space-between;
+  padding: $spacing-sm 0;
+  border-bottom: 1rpx solid $color-divider;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.infoLabel {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+}
+
+.infoValue {
+  font-size: $font-size-sm;
+  color: $color-text-primary;
+  font-weight: $font-weight-medium;
+}
+
+.bottomBar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: $color-bg-card;
+  padding: $spacing-md $page-padding;
+  display: flex;
+  gap: $spacing-md;
+  box-shadow: 0 -2rpx 12rpx rgba(0, 0, 0, 0.06);
+  z-index: 100;
+  padding-bottom: calc(#{$spacing-md} + env(safe-area-inset-bottom));
+}
+
+.secondaryButton {
+  @include button-reset;
+  flex: 1;
+  height: 88rpx;
+  background: $color-bg-sheet;
+  color: $color-text-primary;
+  border-radius: $radius-button;
+  font-size: $font-size-md;
+  font-weight: $font-weight-medium;
+  transition: all $transition-fast;
+
+  &:active {
+    transform: scale(0.98);
+    opacity: 0.9;
+  }
+}
+
+.primaryButton {
+  @include button-reset;
+  flex: 1;
+  height: 88rpx;
+  background: $gradient-primary;
+  color: $color-text-white;
+  border-radius: $radius-button;
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  box-shadow: 0 4rpx 16rpx rgba(7, 193, 96, 0.25);
+  transition: all $transition-fast;
+
+  &:active {
+    transform: scale(0.98);
+    opacity: 0.9;
+  }
+}

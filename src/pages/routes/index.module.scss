@@ -1,0 +1,130 @@
+@use '@/styles/variables.scss' as *;
+
+.routesPage {
+  min-height: 100vh;
+  background: $color-bg-page;
+  padding-bottom: 120rpx;
+}
+
+.filterBar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: $color-bg-page;
+  padding: $spacing-md $page-padding;
+  border-bottom: 1rpx solid $color-divider;
+}
+
+.filterTabs {
+  display: flex;
+  gap: $spacing-sm;
+  margin-bottom: $spacing-md;
+  overflow-x: auto;
+
+  @include scroll-x-container;
+}
+
+.filterTab {
+  @include scroll-x-item(auto);
+  padding: $spacing-sm $spacing-lg;
+  background: $color-bg-card;
+  border-radius: $radius-button;
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  white-space: nowrap;
+  transition: all $transition-fast;
+
+  &.active {
+    background: $color-primary;
+    color: $color-text-white;
+  }
+}
+
+.filterChips {
+  display: flex;
+  gap: $spacing-sm;
+  flex-wrap: wrap;
+}
+
+.filterChip {
+  padding: 6rpx 20rpx;
+  background: $color-bg-card;
+  border-radius: $radius-round;
+  font-size: $font-size-xs;
+  color: $color-text-secondary;
+  border: 1rpx solid $color-border;
+  transition: all $transition-fast;
+
+  &.active {
+    background: $color-primary-bg;
+    color: $color-primary;
+    border-color: $color-primary;
+  }
+}
+
+.sectionTitle {
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-sm;
+}
+
+.routeList {
+  padding: $spacing-md $page-padding;
+}
+
+.sortBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 $page-padding $spacing-md;
+}
+
+.sortLabel {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+}
+
+.sortOptions {
+  display: flex;
+  gap: $spacing-lg;
+}
+
+.sortOption {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  position: relative;
+
+  &.active {
+    color: $color-primary;
+    font-weight: $font-weight-medium;
+  }
+}
+
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 120rpx $page-padding;
+}
+
+.emptyIcon {
+  font-size: 100rpx;
+  margin-bottom: $spacing-lg;
+}
+
+.emptyText {
+  font-size: $font-size-md;
+  color: $color-text-tertiary;
+}
+
+.favoriteTab {
+  display: flex;
+  align-items: center;
+  gap: $spacing-xs;
+}
+
+.favoriteIcon {
+  font-size: 24rpx;
+}

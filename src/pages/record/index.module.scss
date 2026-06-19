@@ -1,0 +1,258 @@
+@use '@/styles/variables.scss' as *;
+
+.recordPage {
+  min-height: 100vh;
+  background: $color-bg-page;
+  padding-bottom: 120rpx;
+}
+
+.mapContainer {
+  position: relative;
+  width: 100%;
+  height: 500rpx;
+  background: linear-gradient(135deg, #e0f2fe 0%, #d1fae5 100%);
+  overflow: hidden;
+}
+
+.mapPlaceholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.mapIcon {
+  font-size: 80rpx;
+  margin-bottom: $spacing-md;
+}
+
+.mapText {
+  font-size: $font-size-md;
+  color: $color-text-secondary;
+}
+
+.statsSection {
+  position: relative;
+  margin-top: -80rpx;
+  padding: 0 $page-padding;
+  z-index: 10;
+}
+
+.statsCard {
+  background: $color-bg-card;
+  border-radius: $radius-xl;
+  padding: $spacing-xl;
+  box-shadow: $shadow-float;
+}
+
+.mainStats {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: $spacing-xl;
+  padding-bottom: $spacing-xl;
+  border-bottom: 1rpx solid $color-divider;
+}
+
+.mainStat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+}
+
+.mainStatValue {
+  font-size: 56rpx;
+  font-weight: $font-weight-bold;
+  color: $color-primary;
+  line-height: 1.2;
+  margin-bottom: 4rpx;
+}
+
+.mainStatLabel {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+}
+
+.subStats {
+  display: flex;
+  justify-content: space-between;
+}
+
+.subStat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+}
+
+.subStatValue {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: 4rpx;
+}
+
+.subStatLabel {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+}
+
+.controlSection {
+  padding: $spacing-xl $page-padding;
+}
+
+.controlButtons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: $spacing-lg;
+}
+
+.controlButton {
+  @include button-reset;
+  width: 160rpx;
+  height: 160rpx;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: all $transition-base;
+
+  &:active {
+    transform: scale(0.95);
+  }
+}
+
+.startButton {
+  width: 200rpx;
+  height: 200rpx;
+  background: $gradient-primary;
+  box-shadow: 0 8rpx 32rpx rgba(7, 193, 96, 0.3);
+}
+
+.startButtonIcon {
+  font-size: 48rpx;
+  color: $color-text-white;
+  margin-bottom: 4rpx;
+}
+
+.startButtonText {
+  font-size: $font-size-sm;
+  color: $color-text-white;
+  font-weight: $font-weight-medium;
+}
+
+.pauseButton {
+  background: $color-warning;
+  box-shadow: 0 6rpx 24rpx rgba(245, 158, 11, 0.3);
+}
+
+.stopButton {
+  background: $color-error;
+  box-shadow: 0 6rpx 24rpx rgba(239, 68, 68, 0.3);
+}
+
+.controlButtonIcon {
+  font-size: 36rpx;
+  color: $color-text-white;
+  margin-bottom: 4rpx;
+}
+
+.controlButtonText {
+  font-size: $font-size-xs;
+  color: $color-text-white;
+  font-weight: $font-weight-medium;
+}
+
+.historySection {
+  padding: 0 $page-padding;
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $spacing-md;
+}
+
+.sectionTitle {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+}
+
+.sectionMore {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+}
+
+.timerDisplay {
+  text-align: center;
+  margin-bottom: $spacing-md;
+}
+
+.timerValue {
+  font-size: 80rpx;
+  font-weight: $font-weight-bold;
+  color: $color-text-primary;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+.timerLabel {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+  margin-top: $spacing-xs;
+}
+
+.recordingIndicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-sm;
+  margin-bottom: $spacing-md;
+}
+
+.recordingDot {
+  width: 16rpx;
+  height: 16rpx;
+  border-radius: 50%;
+  background: $color-error;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.recordingText {
+  font-size: $font-size-sm;
+  color: $color-error;
+  font-weight: $font-weight-medium;
+}
+
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80rpx $page-padding;
+}
+
+.emptyIcon {
+  font-size: 80rpx;
+  margin-bottom: $spacing-md;
+}
+
+.emptyText {
+  font-size: $font-size-md;
+  color: $color-text-tertiary;
+}

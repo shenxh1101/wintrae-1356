@@ -1,0 +1,43 @@
+// ============================================
+// 主题配色变量 - 骑行应用
+// ============================================
+
+// 品牌主题色：骑行绿 - 健康、活力、环保
+$color-primary: #07c160;
+$color-primary-light: #34d399;
+$color-primary-dark: #059669;
+$color-primary-bg: rgba(7, 193, 96, 0.1);
+
+// 功能色
+$color-success: #00b42a;
+$color-warning: #f59e0b;
+$color-error: #ef4444;
+$color-info: #3b82f6;
+
+// 业务色
+$color-distance: #07c160;
+$color-speed: #3b82f6;
+$color-climb: #f59e0b;
+$color-danger: #ef4444;
+$color-supply: #8b5cf6;
+
+// 背景色
+$color-bg-page: #f8fafc;
+$color-bg-card: #ffffff;
+$color-bg-hover: #f1f5f9;
+$color-bg-sheet: #f1f5f9;
+
+// 文本色
+$color-text-primary: #1e293b;
+$color-text-secondary: #64748b;
+$color-text-tertiary: #94a3b8;
+$color-text-disabled: #cbd5e1;
+$color-text-white: #ffffff;
+
+// 边框色
+$color-border: #e2e8f0;
+$color-divider: #f1f5f9;
+
+// 渐变色
+$gradient-primary: linear-gradient(135deg, #07c160 0%, #34d399 100%);
+$gradient-card: linear-gradient(135deg, #07c160 0%, #059669 100%);

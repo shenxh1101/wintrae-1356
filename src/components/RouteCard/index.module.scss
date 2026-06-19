@@ -1,0 +1,110 @@
+@use '@/styles/variables.scss' as *;
+
+.routeCard {
+  display: flex;
+  flex-direction: column;
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  overflow: hidden;
+  box-shadow: $shadow-card;
+  margin-bottom: $spacing-md;
+  transition: all $transition-base;
+
+  &:active {
+    transform: scale(0.98);
+    opacity: 0.9;
+  }
+
+  .cover {
+    width: 100%;
+    height: 300rpx;
+  }
+
+  .content {
+    padding: $spacing-lg;
+  }
+
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: $spacing-sm;
+  }
+
+  .title {
+    font-size: $font-size-lg;
+    font-weight: $font-weight-semibold;
+    color: $color-text-primary;
+    flex: 1;
+    @include text-ellipsis;
+  }
+
+  .favorite {
+    font-size: 36rpx;
+    color: $color-text-tertiary;
+    padding: $spacing-xs;
+    margin-left: $spacing-sm;
+
+    &.active {
+      color: #f59e0b;
+    }
+  }
+
+  .description {
+    font-size: $font-size-sm;
+    color: $color-text-secondary;
+    line-height: 1.5;
+    margin-bottom: $spacing-md;
+    @include text-ellipsis-multi(2);
+  }
+
+  .footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .tags {
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+  }
+
+  .tag {
+    padding: 4rpx 16rpx;
+    border-radius: $radius-sm;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-medium;
+  }
+
+  .tagLight {
+    padding: 4rpx 16rpx;
+    border-radius: $radius-sm;
+    font-size: $font-size-xs;
+    background: $color-bg-sheet;
+    color: $color-text-secondary;
+  }
+
+  .stats {
+    display: flex;
+    align-items: center;
+    font-size: $font-size-sm;
+    color: $color-text-secondary;
+  }
+
+  .statItem {
+    display: flex;
+    align-items: center;
+  }
+
+  .statValue {
+    color: $color-text-primary;
+    font-weight: $font-weight-medium;
+    margin-right: 4rpx;
+  }
+
+  .statDivider {
+    margin: 0 $spacing-xs;
+    color: $color-text-tertiary;
+  }
+}
