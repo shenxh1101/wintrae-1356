@@ -41,6 +41,10 @@ const RecordPage: React.FC = () => {
 
         forceUpdate(prev => prev + 1);
       }, 1000);
+    } else if (currentRide.isPaused) {
+      timerRef.current = setInterval(() => {
+        forceUpdate(prev => prev + 1);
+      }, 1000);
     } else {
       if (timerRef.current) {
         clearInterval(timerRef.current);

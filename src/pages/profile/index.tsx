@@ -21,16 +21,36 @@ const ProfilePage: React.FC = () => {
   }, []);
 
   const handleExport = async (format: 'gpx' | 'csv' | 'json') => {
+    let startDate = '2000-01-01';
+    let endDate = '2099-12-31';
+    
+    if (rides.length > 0) {
+      const allDates = rides.flatMap(r => [r.startTime, r.endTime]);
+      const minDate = new Date(Math.min(...allDates.map(d => new Date(d).getTime())));
+      const maxDate = new Date(Math.max(...allDates.map(d => new Date(d).getTime())));
+      
+      const formatDateStr = (date: Date) => {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+      };
+      
+      startDate = formatDateStr(minDate);
+      endDate = formatDateStr(maxDate);
+    }
+    
     const options = {
       format,
       includePhotos: false,
-      dateRange: { start: '2024-01-01', end: '2024-12-31' }
+      dateRange: { start: startDate, end: endDate }
     };
+    
     try {
       const content = await exportData(options, rides);
       Taro.showModal({
         title: `导出${format.toUpperCase()}成功`,
-        content: content.substring(0, 500) + (content.length > 500 ? '\n...(内容已截断)' : ''),
+        content: `共导出 ${rides.length} 条骑行记录\n\n` + content.substring(0, 400) + (content.length > 400 ? '\n...(内容已截断)' : ''),
         showCancel: false
       });
     } catch (e) {

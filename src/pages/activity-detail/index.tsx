@@ -31,6 +31,10 @@ const ActivityDetailPage: React.FC = () => {
   const handleJoin = async () => {
     if (!activity) return;
     
+    if (isOrganizer) {
+      return;
+    }
+    
     if (isJoined) {
       Taro.showModal({
         title: '退出活动',
@@ -318,7 +322,7 @@ const ActivityDetailPage: React.FC = () => {
           >
             <View style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24rpx' }}>
               <Text style={{ fontSize: '32rpx', fontWeight: '600' }}>
-                报名名单 ({activity.participants.length}人)
+                报名名单 ({activity.currentParticipants}人)
               </Text>
               <Text 
                 style={{ color: '#64748b', fontSize: '28rpx' }}
