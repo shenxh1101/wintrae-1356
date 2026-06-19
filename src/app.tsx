@@ -1,16 +1,30 @@
 import React, { useEffect } from 'react';
 import { useDidShow, useDidHide } from '@tarojs/taro';
-// 全局样式
+import { useRouteStore } from './store/routeStore';
+import { useRideStore } from './store/rideStore';
+import { useActivityStore } from './store/activityStore';
+import { useUserStore } from './store/userStore';
 import './app.scss';
 
 function App(props) {
-  // 可以使用所有的 React Hooks
-  useEffect(() => {});
+  const initRoutes = useRouteStore(state => state.initRoutes);
+  const initRides = useRideStore(state => state.initRides);
+  const initActivities = useActivityStore(state => state.initActivities);
+  const initUser = useUserStore(state => state.initUser);
 
-  // 对应 onShow
+  useEffect(() => {
+    const initAll = async () => {
+      await Promise.all([
+        initRoutes(),
+        initRides(),
+        initActivities(),
+        initUser()
+      ]);
+    };
+    initAll();
+  }, [initRoutes, initRides, initActivities, initUser]);
+
   useDidShow(() => {});
-
-  // 对应 onHide
   useDidHide(() => {});
 
   return props.children;

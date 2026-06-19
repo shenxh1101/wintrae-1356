@@ -1,0 +1,130 @@
+@use '@/styles/variables.scss' as *;
+
+.privacyPage {
+  min-height: 100vh;
+  background: $color-bg-page;
+  padding-bottom: 120rpx;
+}
+
+.tipCard {
+  margin: $spacing-lg $page-padding;
+  padding: $spacing-lg;
+  background: $gradient-primary;
+  border-radius: $radius-lg;
+  display: flex;
+  align-items: flex-start;
+  gap: $spacing-md;
+  box-shadow: 0 8rpx 24rpx rgba(7, 193, 96, 0.2);
+}
+
+.tipIcon {
+  width: 80rpx;
+  height: 80rpx;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: $radius-md;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40rpx;
+  flex-shrink: 0;
+}
+
+.tipContent {
+  flex: 1;
+  min-width: 0;
+}
+
+.tipTitle {
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-text-white;
+  display: block;
+  margin-bottom: $spacing-xs;
+}
+
+.tipDesc {
+  font-size: $font-size-xs;
+  color: rgba(255, 255, 255, 0.85);
+  line-height: $line-height-normal;
+  display: block;
+}
+
+.section {
+  margin: 0 $page-padding $spacing-lg;
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  overflow: hidden;
+  box-shadow: $shadow-card;
+}
+
+.sectionTitle {
+  padding: $spacing-md $spacing-lg;
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  border-bottom: 1rpx solid $color-divider;
+}
+
+.settingsList {
+  padding: 0 $spacing-lg;
+}
+
+.settingItem {
+  display: flex;
+  align-items: center;
+  padding: $spacing-lg 0;
+  border-bottom: 1rpx solid $color-divider;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.settingIcon {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: $radius-md;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36rpx;
+  margin-right: $spacing-md;
+  flex-shrink: 0;
+}
+
+.settingInfo {
+  flex: 1;
+  min-width: 0;
+  margin-right: $spacing-md;
+}
+
+.settingTitle {
+  font-size: $font-size-md;
+  font-weight: $font-weight-medium;
+  color: $color-text-primary;
+  display: block;
+  margin-bottom: 4rpx;
+}
+
+.settingDesc {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  line-height: $line-height-normal;
+  display: block;
+}
+
+.settingSwitch {
+  flex-shrink: 0;
+  transform: scale(0.9);
+}
+
+.footer {
+  margin: $spacing-xl $page-padding;
+  text-align: center;
+}
+
+.footerText {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  line-height: $line-height-normal;
+}

@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, Image, Button, ScrollView } from '@tarojs/components';
+import React, { useState, useEffect, useMemo } from 'react';
+import { View, Text, Image, Button, ScrollView, Input } from '@tarojs/components';
 import Taro, { useRouter } from '@tarojs/taro';
 import styles from './index.module.scss';
-import { mockActivities } from '../../data/activities';
+import { useActivityStore } from '../../store/activityStore';
+import { mockUserProfile } from '../../data/user';
 import type { Activity } from '../../types/activity';
 import { getDifficultyLabel, getDifficultyColor, getPaceLabel, getActivityStatusLabel, getActivityStatusColor, formatDate } from '../../utils/format';
 import classnames from 'classnames';
@@ -10,36 +11,44 @@ import classnames from 'classnames';
 const ActivityDetailPage: React.FC = () => {
   const router = useRouter();
   const activityId = router.params.id;
-  const [activity, setActivity] = useState<Activity | null>(null);
-  const [isJoined, setIsJoined] = useState(false);
+  const { activities, joinActivity, leaveActivity, hasJoined, addAnnouncement } = useActivityStore();
+  const [showAnnouncementInput, setShowAnnouncementInput] = useState(false);
+  const [announcementContent, setAnnouncementContent] = useState('');
+  const [showParticipantsList, setShowParticipantsList] = useState(false);
 
-  useEffect(() => {
-    const foundActivity = mockActivities.find(a => a.id === activityId);
-    if (foundActivity) {
-      setActivity(foundActivity);
-      const hasJoined = foundActivity.participants.some(p => p.id === 'u1');
-      setIsJoined(hasJoined);
-    }
-  }, [activityId]);
+  const activity = useMemo(() => {
+    return activities.find(a => a.id === activityId) || null;
+  }, [activities, activityId]);
 
-  const handleJoin = () => {
+  const isJoined = useMemo(() => {
+    return activity ? hasJoined(activity.id) : false;
+  }, [activity, hasJoined]);
+
+  const isOrganizer = useMemo(() => {
+    return activity?.organizer.id === mockUserProfile.id;
+  }, [activity]);
+
+  const handleJoin = async () => {
     if (!activity) return;
     
     if (isJoined) {
       Taro.showModal({
         title: '退出活动',
         content: '确定要退出此活动吗？',
-        success: (res) => {
+        success: async (res) => {
           if (res.confirm) {
-            setIsJoined(false);
-            setActivity({
-              ...activity,
-              currentParticipants: activity.currentParticipants - 1
-            });
-            Taro.showToast({
-              title: '已退出活动',
-              icon: 'none'
-            });
+            const success = await leaveActivity(activity.id);
+            if (success) {
+              Taro.showToast({
+                title: '已退出活动',
+                icon: 'success'
+              });
+            } else {
+              Taro.showToast({
+                title: '退出失败',
+                icon: 'none'
+              });
+            }
           }
         }
       });
@@ -52,14 +61,36 @@ const ActivityDetailPage: React.FC = () => {
         return;
       }
       
-      setIsJoined(true);
-      setActivity({
-        ...activity,
-        currentParticipants: activity.currentParticipants + 1
-      });
+      const success = await joinActivity(activity.id);
+      if (success) {
+        Taro.showToast({
+          title: '报名成功',
+          icon: 'success'
+        });
+      } else {
+        Taro.showToast({
+          title: '报名失败',
+          icon: 'none'
+        });
+      }
+    }
+  };
+
+  const handleAddAnnouncement = async () => {
+    if (!activity || !announcementContent.trim()) return;
+    
+    const result = await addAnnouncement(activity.id, announcementContent.trim());
+    if (result) {
       Taro.showToast({
-        title: '报名成功',
+        title: '公告发布成功',
         icon: 'success'
+      });
+      setAnnouncementContent('');
+      setShowAnnouncementInput(false);
+    } else {
+      Taro.showToast({
+        title: '发布失败',
+        icon: 'none'
       });
     }
   };
@@ -81,14 +112,12 @@ const ActivityDetailPage: React.FC = () => {
   return (
     <View className={styles.activityDetailPage}>
       <ScrollView scrollY>
-        {/* 封面图 */}
         <Image 
           className={styles.coverImage} 
           src={activity.coverImage}
           mode="aspectFill"
         />
 
-        {/* 活动基本信息 */}
         <View className={styles.activityInfo}>
           <View 
             className={styles.statusBadge}
@@ -127,7 +156,6 @@ const ActivityDetailPage: React.FC = () => {
           </View>
         </View>
 
-        {/* 组织者 */}
         <View className={styles.section}>
           <Text className={styles.sectionTitle}>
             <Text className={styles.sectionIcon}>👤</Text>
@@ -146,14 +174,18 @@ const ActivityDetailPage: React.FC = () => {
           </View>
         </View>
 
-        {/* 参与人员 */}
         <View className={styles.section}>
           <View className={styles.sectionHeader}>
             <Text className={styles.sectionTitle}>
               <Text className={styles.sectionIcon}>👥</Text>
               参与人员 ({activity.currentParticipants}/{activity.maxParticipants})
             </Text>
-            <Text className={styles.sectionMore}>查看全部 ›</Text>
+            <Text 
+              className={styles.sectionMore} 
+              onClick={() => setShowParticipantsList(true)}
+            >
+              查看全部 ›
+            </Text>
           </View>
           {activity.participants.length > 0 ? (
             <View className={styles.participantsList}>
@@ -176,12 +208,63 @@ const ActivityDetailPage: React.FC = () => {
           )}
         </View>
 
-        {/* 临时公告 */}
         <View className={styles.section}>
-          <Text className={styles.sectionTitle}>
-            <Text className={styles.sectionIcon}>📢</Text>
-            临时公告
-          </Text>
+          <View className={styles.sectionHeader}>
+            <Text className={styles.sectionTitle}>
+              <Text className={styles.sectionIcon}>📢</Text>
+              临时公告
+            </Text>
+            {isOrganizer && !isCompleted && !isCancelled && (
+              <Text 
+                className={styles.sectionMore}
+                onClick={() => setShowAnnouncementInput(true)}
+              >
+                + 发布公告
+              </Text>
+            )}
+          </View>
+
+          {showAnnouncementInput && (
+            <View style={{ 
+              backgroundColor: '#f1f5f9', 
+              padding: '24rpx', 
+              borderRadius: '16rpx',
+              marginBottom: '24rpx'
+            }}>
+              <Input
+                placeholder="请输入公告内容..."
+                value={announcementContent}
+                onInput={(e) => setAnnouncementContent(e.detail.value)}
+                style={{
+                  backgroundColor: '#fff',
+                  padding: '20rpx',
+                  borderRadius: '12rpx',
+                  marginBottom: '16rpx',
+                  fontSize: '28rpx'
+                }}
+              />
+              <View style={{ display: 'flex', gap: '16rpx' }}>
+                <Button 
+                  size="mini"
+                  style={{ flex: 1, backgroundColor: '#cbd5e1', color: '#475569' }}
+                  onClick={() => {
+                    setShowAnnouncementInput(false);
+                    setAnnouncementContent('');
+                  }}
+                >
+                  取消
+                </Button>
+                <Button 
+                  size="mini"
+                  style={{ flex: 1 }}
+                  onClick={handleAddAnnouncement}
+                >
+                  发布
+                </Button>
+              </View>
+            </View>
+          )}
+
           {activity.announcements.length > 0 ? (
             <View className={styles.announcementList}>
               {activity.announcements.map(announcement => (
@@ -210,7 +293,88 @@ const ActivityDetailPage: React.FC = () => {
         </View>
       </ScrollView>
 
-      {/* 底部操作栏 */}
+      {showParticipantsList && (
+        <View style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundColor: 'rgba(0,0,0,0.5)',
+          zIndex: 1000,
+          display: 'flex',
+          alignItems: 'flex-end'
+        }} onClick={() => setShowParticipantsList(false)}>
+          <View 
+            style={{
+              width: '100%',
+              maxHeight: '70vh',
+              backgroundColor: '#fff',
+              borderTopLeftRadius: '24rpx',
+              borderTopRightRadius: '24rpx',
+              padding: '32rpx'
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <View style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24rpx' }}>
+              <Text style={{ fontSize: '32rpx', fontWeight: '600' }}>
+                报名名单 ({activity.participants.length}人)
+              </Text>
+              <Text 
+                style={{ color: '#64748b', fontSize: '28rpx' }}
+                onClick={() => setShowParticipantsList(false)}
+              >
+                关闭
+              </Text>
+            </View>
+            <ScrollView scrollY style={{ maxHeight: '50vh' }}>
+              {activity.participants.map(participant => (
+                <View 
+                  key={participant.id} 
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    padding: '20rpx 0',
+                    borderBottom: '1rpx solid #f1f5f9'
+                  }}
+                >
+                  <Image 
+                    src={participant.avatar}
+                    mode="aspectFill"
+                    style={{
+                      width: '80rpx',
+                      height: '80rpx',
+                      borderRadius: '50%',
+                      marginRight: '20rpx'
+                    }}
+                  />
+                  <View>
+                    <Text style={{ fontSize: '28rpx', color: '#1e293b', fontWeight: '500' }}>
+                      {participant.name}
+                    </Text>
+                    <Text style={{ fontSize: '22rpx', color: '#94a3b8' }}>
+                      报名时间: {formatDate(participant.joinedAt)}
+                    </Text>
+                  </View>
+                  {participant.id === activity.organizer.id && (
+                    <View style={{
+                      marginLeft: 'auto',
+                      backgroundColor: '#10b981',
+                      padding: '6rpx 16rpx',
+                      borderRadius: '8rpx',
+                      fontSize: '20rpx',
+                      color: '#fff'
+                    }}>
+                      组织者
+                    </View>
+                  )}
+                </View>
+              ))}
+            </ScrollView>
+          </View>
+        </View>
+      )}
+
       <View className={styles.bottomBar}>
         <Text className={styles.participantsCount}>
           <Text className={styles.countHighlight}>{activity.currentParticipants}</Text>
@@ -223,11 +387,12 @@ const ActivityDetailPage: React.FC = () => {
             (isFull || isCancelled || isCompleted) && styles.disabled
           )}
           onClick={handleJoin}
-          disabled={isCancelled || isCompleted}
+          disabled={isCancelled || isCompleted || (isOrganizer && !isJoined)}
         >
           {isCancelled ? '活动已取消' : 
            isCompleted ? '活动已结束' :
-           isJoined ? '已报名' :
+           isOrganizer ? '我是组织者' :
+           isJoined ? '退出报名' :
            isFull ? '名额已满' : '立即报名'}
         </Button>
       </View>

@@ -3,15 +3,15 @@ import { View, Text, ScrollView } from '@tarojs/components';
 import Taro from '@tarojs/taro';
 import styles from './index.module.scss';
 import RouteCard from '../../components/RouteCard';
-import { mockRoutes } from '../../data/routes';
-import type { Route, DifficultyLevel, SceneryType } from '../../types/route';
+import { useRouteStore } from '../../store/routeStore';
+import type { DifficultyLevel, SceneryType } from '../../types/route';
 import classnames from 'classnames';
 
 type FilterTab = 'all' | 'favorite';
 type DistanceFilter = 'all' | 'short' | 'medium' | 'long';
 
 const RoutesPage: React.FC = () => {
-  const [routes, setRoutes] = useState<Route[]>([]);
+  const { routes, toggleFavorite, initRoutes } = useRouteStore();
   const [activeTab, setActiveTab] = useState<FilterTab>('all');
   const [distanceFilter, setDistanceFilter] = useState<DistanceFilter>('all');
   const [difficultyFilter, setDifficultyFilter] = useState<DifficultyLevel | 'all'>('all');
@@ -20,17 +20,13 @@ const RoutesPage: React.FC = () => {
   const [isRefreshing, setIsRefreshing] = useState(false);
 
   useEffect(() => {
-    loadRoutes();
-  }, []);
-
-  const loadRoutes = () => {
-    setRoutes(mockRoutes);
-  };
+    initRoutes();
+  }, [initRoutes]);
 
   const onPullDownRefresh = () => {
     setIsRefreshing(true);
     setTimeout(() => {
-      loadRoutes();
+      initRoutes();
       setIsRefreshing(false);
       Taro.stopPullDownRefresh();
     }, 1000);
@@ -60,13 +56,7 @@ const RoutesPage: React.FC = () => {
   });
 
   const handleFavorite = (id: string) => {
-    setRoutes(prev => 
-      prev.map(route => 
-        route.id === id 
-          ? { ...route, isFavorite: !route.isFavorite, likes: route.isFavorite ? route.likes - 1 : route.likes + 1 }
-          : route
-      )
-    );
+    toggleFavorite(id);
   };
 
   const toggleDistanceFilter = (filter: DistanceFilter) => {

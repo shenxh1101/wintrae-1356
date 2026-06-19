@@ -9,7 +9,9 @@ export default defineAppConfig({
     'pages/ride-result/index',
     'pages/activity-detail/index',
     'pages/create-activity/index',
-    'pages/equipment/index'
+    'pages/equipment/index',
+    'pages/plan-route/index',
+    'pages/privacy/index'
   ],
   window: {
     backgroundTextStyle: 'light',

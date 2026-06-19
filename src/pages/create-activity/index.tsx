@@ -4,6 +4,7 @@ import Taro from '@tarojs/taro';
 import styles from './index.module.scss';
 import classnames from 'classnames';
 import type { CreateActivityForm } from '../../types/activity';
+import { useActivityStore } from '../../store/activityStore';
 
 const difficultyOptions = [
   { value: 'easy', label: '休闲', color: '#07c160' },
@@ -18,6 +19,7 @@ const paceOptions = [
 ];
 
 const CreateActivityPage: React.FC = () => {
+  const { addActivity } = useActivityStore();
   const [form, setForm] = useState<CreateActivityForm>({
     title: '',
     description: '',
@@ -69,10 +71,16 @@ const CreateActivityPage: React.FC = () => {
     Taro.showModal({
       title: '确认发布',
       content: '确定要发布此活动吗？',
-      success: (res) => {
+      success: async (res) => {
         if (res.confirm) {
           Taro.showLoading({ title: '发布中...' });
-          setTimeout(() => {
+          try {
+            await addActivity({
+              ...form,
+              coverImage: 'https://picsum.photos/seed/cycling/800/400',
+              meetupLatitude: 31.2304,
+              meetupLongitude: 121.4737
+            });
             Taro.hideLoading();
             Taro.showToast({
               title: '发布成功',
@@ -83,7 +91,13 @@ const CreateActivityPage: React.FC = () => {
                 }, 1500);
               }
             });
-          }, 1000);
+          } catch (error) {
+            Taro.hideLoading();
+            Taro.showToast({
+              title: '发布失败，请重试',
+              icon: 'none'
+            });
+          }
         }
       }
     });

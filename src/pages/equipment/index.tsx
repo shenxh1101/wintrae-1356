@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, ScrollView, Button } from '@tarojs/components';
 import Taro from '@tarojs/taro';
 import styles from './index.module.scss';
-import { mockEquipments } from '../../data/user';
+import { useUserStore } from '../../store/userStore';
 import type { Equipment } from '../../types/user';
 import { formatDateFull } from '../../utils/format';
 import classnames from 'classnames';
@@ -15,7 +15,7 @@ const equipmentTypeMap: Record<string, { label: string; icon: string; color: str
 };
 
 const EquipmentPage: React.FC = () => {
-  const [equipments, setEquipments] = useState<Equipment[]>(mockEquipments);
+  const { equipments, deleteEquipment, recordMaintenance } = useUserStore();
   const [activeType, setActiveType] = useState<string>('all');
 
   const typeTabs = [
@@ -46,7 +46,7 @@ const EquipmentPage: React.FC = () => {
   const handleEquipmentClick = (equipment: Equipment) => {
     Taro.showActionSheet({
       itemList: ['查看详情', '记录保养', '编辑装备', '删除装备'],
-      success: (res) => {
+      success: async (res) => {
         switch (res.tapIndex) {
           case 0:
             Taro.showToast({ title: '查看详情', icon: 'none' });
@@ -55,8 +55,9 @@ const EquipmentPage: React.FC = () => {
             Taro.showModal({
               title: '记录保养',
               content: `确认已完成 "${equipment.name}" 的保养吗？`,
-              success: (modalRes) => {
+              success: async (modalRes) => {
                 if (modalRes.confirm) {
+                  await recordMaintenance(equipment.id);
                   Taro.showToast({ title: '已记录保养', icon: 'success' });
                 }
               }
@@ -70,9 +71,9 @@ const EquipmentPage: React.FC = () => {
               title: '删除装备',
               content: `确定要删除 "${equipment.name}" 吗？`,
               confirmColor: '#ef4444',
-              success: (modalRes) => {
+              success: async (modalRes) => {
                 if (modalRes.confirm) {
-                  setEquipments(prev => prev.filter(e => e.id !== equipment.id));
+                  await deleteEquipment(equipment.id);
                   Taro.showToast({ title: '已删除', icon: 'success' });
                 }
               }
@@ -100,7 +101,6 @@ const EquipmentPage: React.FC = () => {
 
   return (
     <View className={styles.equipmentPage}>
-      {/* 统计卡片 */}
       <View className={styles.statsCard}>
         <View className={styles.statsItem}>
           <Text className={styles.statsValue}>{equipments.length}</Text>
@@ -120,7 +120,6 @@ const EquipmentPage: React.FC = () => {
         </View>
       </View>
 
-      {/* 分类标签 */}
       <ScrollView className={styles.typeTabs} scrollX>
         {typeTabs.map(tab => (
           <View
@@ -136,7 +135,6 @@ const EquipmentPage: React.FC = () => {
         ))}
       </ScrollView>
 
-      {/* 装备列表 */}
       <ScrollView className={styles.equipmentList} scrollY>
         {filteredEquipments.length > 0 ? (
           filteredEquipments.map(equipment => {
@@ -224,7 +222,6 @@ const EquipmentPage: React.FC = () => {
         <View style={{ height: '160rpx' }} />
       </ScrollView>
 
-      {/* 添加按钮 */}
       <View className={styles.bottomBar}>
         <Button className={styles.addButton} onClick={handleAddEquipment}>
           <Text className={styles.addIcon}>＋</Text>

@@ -1,0 +1,473 @@
+@use '@/styles/variables.scss' as *;
+
+.planRoutePage {
+  min-height: 100vh;
+  background: $color-bg-page;
+  padding-bottom: 140rpx;
+}
+
+.stepIndicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: $spacing-lg $page-padding $spacing-sm;
+  gap: $spacing-md;
+}
+
+.stepDot {
+  width: 48rpx;
+  height: 48rpx;
+  border-radius: 50%;
+  background: $color-bg-sheet;
+  color: $color-text-tertiary;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all $transition-fast;
+
+  &.stepDotActive {
+    background: $color-primary;
+    color: $color-text-white;
+  }
+}
+
+.stepLine {
+  flex: 1;
+  max-width: 80rpx;
+  height: 4rpx;
+  background: $color-bg-sheet;
+  transition: all $transition-fast;
+
+  &.stepLineActive {
+    background: $color-primary;
+  }
+}
+
+.stepLabels {
+  display: flex;
+  justify-content: center;
+  gap: 48rpx;
+  padding: 0 $page-padding $spacing-md;
+}
+
+.stepLabelActive {
+  color: $color-primary;
+  font-weight: $font-weight-medium;
+}
+
+.mapContainer {
+  margin: 0 $page-padding;
+  height: 400rpx;
+  border-radius: $radius-lg;
+  overflow: hidden;
+  background: linear-gradient(135deg, #e0f2fe 0%, #d1fae5 100%);
+  box-shadow: $shadow-card;
+}
+
+.mapPlaceholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.mapIcon {
+  font-size: 64rpx;
+  margin-bottom: $spacing-sm;
+}
+
+.mapText {
+  font-size: $font-size-md;
+  color: $color-text-secondary;
+}
+
+.routeInfo {
+  margin-top: $spacing-md;
+  text-align: center;
+}
+
+.routeText {
+  font-size: $font-size-sm;
+  color: $color-text-primary;
+  font-weight: $font-weight-medium;
+}
+
+.routeDistance {
+  display: block;
+  margin-top: 4rpx;
+  font-size: $font-size-xs;
+  color: $color-primary;
+}
+
+.section {
+  margin: $spacing-lg $page-padding;
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  box-shadow: $shadow-card;
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $spacing-md;
+}
+
+.sectionTitle {
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-md;
+}
+
+.pointCard {
+  display: flex;
+  align-items: center;
+  padding: $spacing-md;
+  background: $color-bg-sheet;
+  border-radius: $radius-md;
+  margin-bottom: $spacing-sm;
+}
+
+.pointIconStart,
+.pointIconEnd {
+  width: 56rpx;
+  height: 56rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32rpx;
+  margin-right: $spacing-md;
+}
+
+.pointInfo {
+  flex: 1;
+}
+
+.pointLabel {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  margin-bottom: 4rpx;
+}
+
+.pointValue {
+  font-size: $font-size-md;
+  color: $color-text-primary;
+  font-weight: $font-weight-medium;
+
+  &.placeholder {
+    color: $color-text-tertiary;
+  }
+}
+
+.pointArrow {
+  font-size: $font-size-lg;
+  color: $color-text-tertiary;
+}
+
+.addBtn {
+  @include button-reset;
+  padding: $spacing-xs $spacing-md;
+  background: $color-primary;
+  color: $color-text-white;
+  border-radius: $radius-round;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-medium;
+}
+
+.markerItem {
+  display: flex;
+  align-items: center;
+  padding: $spacing-md;
+  background: $color-bg-sheet;
+  border-radius: $radius-md;
+  margin-bottom: $spacing-sm;
+}
+
+.markerIcon {
+  width: 48rpx;
+  height: 48rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28rpx;
+  margin-right: $spacing-md;
+  background: rgba(59, 130, 246, 0.1);
+  border-radius: $radius-sm;
+}
+
+.markerIconDanger {
+  width: 48rpx;
+  height: 48rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28rpx;
+  margin-right: $spacing-md;
+  background: rgba(239, 68, 68, 0.1);
+  border-radius: $radius-sm;
+}
+
+.markerInfo {
+  flex: 1;
+}
+
+.markerName {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  color: $color-text-primary;
+  margin-bottom: 2rpx;
+}
+
+.markerType {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+}
+
+.markerDesc {
+  font-size: $font-size-xs;
+  color: $color-text-secondary;
+}
+
+.deleteBtn {
+  @include button-reset;
+  padding: $spacing-xs $spacing-sm;
+  background: rgba(239, 68, 68, 0.1);
+  color: $color-error;
+  border-radius: $radius-sm;
+  font-size: $font-size-xs;
+}
+
+.emptyMarkers {
+  padding: $spacing-lg;
+  text-align: center;
+  color: $color-text-tertiary;
+  font-size: $font-size-sm;
+}
+
+.formItem {
+  margin-bottom: $spacing-lg;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.formLabel {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  margin-bottom: $spacing-sm;
+  display: block;
+}
+
+.formInput {
+  width: 100%;
+  height: 80rpx;
+  padding: 0 $spacing-md;
+  background: $color-bg-sheet;
+  border-radius: $radius-md;
+  font-size: $font-size-md;
+  color: $color-text-primary;
+  box-sizing: border-box;
+}
+
+.optionRow {
+  display: flex;
+  gap: $spacing-sm;
+  flex-wrap: wrap;
+}
+
+.optionTag {
+  padding: $spacing-sm $spacing-md;
+  border: 2rpx solid $color-border;
+  border-radius: $radius-round;
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  transition: all $transition-fast;
+
+  &.optionTagActive {
+    font-weight: $font-weight-medium;
+    background: rgba(7, 193, 96, 0.08);
+  }
+}
+
+.summaryCard {
+  margin-top: $spacing-lg;
+  padding: $spacing-lg;
+  background: linear-gradient(135deg, rgba(7, 193, 96, 0.08) 0%, rgba(52, 211, 153, 0.08) 100%);
+  border-radius: $radius-md;
+}
+
+.summaryTitle {
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-md;
+}
+
+.summaryGrid {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: $spacing-md;
+}
+
+.summaryItem {
+  text-align: center;
+}
+
+.summaryValue {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-bold;
+  color: $color-primary;
+  display: block;
+  margin-bottom: 4rpx;
+}
+
+.summaryLabel {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+}
+
+.summaryInfo {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  margin-top: $spacing-sm;
+  display: block;
+}
+
+.bottomBar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: $color-bg-card;
+  padding: $spacing-md $page-padding;
+  display: flex;
+  gap: $spacing-md;
+  box-shadow: 0 -2rpx 12rpx rgba(0, 0, 0, 0.06);
+  z-index: 100;
+  padding-bottom: calc(#{$spacing-md} + env(safe-area-inset-bottom));
+}
+
+.prevBtn {
+  @include button-reset;
+  flex: 1;
+  height: 88rpx;
+  background: $color-bg-sheet;
+  color: $color-text-secondary;
+  border-radius: $radius-button;
+  font-size: $font-size-md;
+  font-weight: $font-weight-medium;
+}
+
+.nextBtn {
+  @include button-reset;
+  flex: 2;
+  height: 88rpx;
+  background: $gradient-primary;
+  color: $color-text-white;
+  border-radius: $radius-button;
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  box-shadow: 0 4rpx 16rpx rgba(7, 193, 96, 0.25);
+}
+
+.saveBtn {
+  @include button-reset;
+  flex: 2;
+  height: 88rpx;
+  background: $gradient-primary;
+  color: $color-text-white;
+  border-radius: $radius-button;
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  box-shadow: 0 4rpx 16rpx rgba(7, 193, 96, 0.25);
+}
+
+.modalPage {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: $page-padding;
+}
+
+.modalContent {
+  width: 100%;
+  background: $color-bg-card;
+  border-radius: $radius-xl;
+  padding: $spacing-xl;
+  box-shadow: $shadow-popup;
+}
+
+.modalTitle {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-bold;
+  color: $color-text-primary;
+  text-align: center;
+  margin-bottom: $spacing-lg;
+}
+
+.typeGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: $spacing-sm;
+  margin-bottom: $spacing-lg;
+}
+
+.typeItem {
+  padding: $spacing-md;
+  border: 2rpx solid $color-border;
+  border-radius: $radius-md;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $spacing-xs;
+  transition: all $transition-fast;
+
+  &.typeItemActive {
+    font-weight: $font-weight-medium;
+  }
+}
+
+.typeIcon {
+  font-size: 36rpx;
+}
+
+.modalActions {
+  display: flex;
+  gap: $spacing-md;
+  margin-top: $spacing-lg;
+}
+
+.cancelBtn {
+  @include button-reset;
+  flex: 1;
+  height: 80rpx;
+  background: $color-bg-sheet;
+  color: $color-text-secondary;
+  border-radius: $radius-button;
+  font-size: $font-size-md;
+}
+
+.confirmBtn {
+  @include button-reset;
+  flex: 1;
+  height: 80rpx;
+  background: $gradient-primary;
+  color: $color-text-white;
+  border-radius: $radius-button;
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+}

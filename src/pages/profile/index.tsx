@@ -2,20 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, Image, ScrollView } from '@tarojs/components';
 import Taro from '@tarojs/taro';
 import styles from './index.module.scss';
-import { mockUserProfile, mockEquipments } from '../../data/user';
-import { mockMonthlyStats } from '../../data/rides';
-import type { UserProfile, Equipment } from '../../types/user';
-import type { MonthlyStats } from '../../types/ride';
+import { useUserStore } from '../../store/userStore';
+import { useRideStore } from '../../store/rideStore';
+import { mockEquipments } from '../../data/user';
 
 const ProfilePage: React.FC = () => {
-  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
-  const [monthlyStats, setMonthlyStats] = useState<MonthlyStats | null>(null);
+  const { profile, exportData } = useUserStore();
+  const { rides, monthlyStats } = useRideStore();
   const [needsMaintenance, setNeedsMaintenance] = useState(0);
 
   useEffect(() => {
-    setUserProfile(mockUserProfile);
-    setMonthlyStats(mockMonthlyStats);
-    
     const needMaintenance = mockEquipments.filter(e => {
       const nextDate = new Date(e.nextMaintenance);
       const today = new Date();
@@ -24,6 +20,24 @@ const ProfilePage: React.FC = () => {
     setNeedsMaintenance(needMaintenance);
   }, []);
 
+  const handleExport = async (format: 'gpx' | 'csv' | 'json') => {
+    const options = {
+      format,
+      includePhotos: false,
+      dateRange: { start: '2024-01-01', end: '2024-12-31' }
+    };
+    try {
+      const content = await exportData(options, rides);
+      Taro.showModal({
+        title: `导出${format.toUpperCase()}成功`,
+        content: content.substring(0, 500) + (content.length > 500 ? '\n...(内容已截断)' : ''),
+        showCancel: false
+      });
+    } catch (e) {
+      Taro.showToast({ title: '导出失败', icon: 'none' });
+    }
+  };
+
   const handleEquipment = () => {
     Taro.navigateTo({
       url: '/pages/equipment/index'
@@ -31,22 +45,8 @@ const ProfilePage: React.FC = () => {
   };
 
   const handlePrivacy = () => {
-    Taro.showToast({
-      title: '隐私设置',
-      icon: 'none'
-    });
-  };
-
-  const handleDataExport = () => {
-    Taro.showActionSheet({
-      itemList: ['导出为 GPX 格式', '导出为 CSV 格式', '导出为 JSON 格式'],
-      success: (res) => {
-        const formats = ['gpx', 'csv', 'json'];
-        Taro.showToast({
-          title: `正在导出 ${formats[res.tapIndex].toUpperCase()} 文件...`,
-          icon: 'none'
-        });
-      }
+    Taro.navigateTo({
+      url: '/pages/privacy/index'
     });
   };
 
@@ -81,13 +81,6 @@ const ProfilePage: React.FC = () => {
       color: '#8b5cf6'
     },
     { 
-      icon: '📤', 
-      label: '数据导出', 
-      desc: '导出骑行记录数据',
-      onClick: handleDataExport,
-      color: '#f59e0b'
-    },
-    { 
       icon: '⚡', 
       label: '通用设置', 
       desc: '应用偏好设置',
@@ -103,7 +96,7 @@ const ProfilePage: React.FC = () => {
     }
   ];
 
-  if (!userProfile || !monthlyStats) {
+  if (!profile || !monthlyStats) {
     return <View className={styles.profilePage} />;
   }
 
@@ -114,15 +107,15 @@ const ProfilePage: React.FC = () => {
         <View className={styles.profileInfo}>
           <Image 
             className={styles.avatar} 
-            src={userProfile.avatar}
+            src={profile.avatar}
             mode="aspectFill"
           />
           <View className={styles.userInfo}>
-            <Text className={styles.userName}>{userProfile.name}</Text>
-            <Text className={styles.userBio}>{userProfile.bio}</Text>
-            <Text className={styles.userLocation}>📍 {userProfile.location}</Text>
+            <Text className={styles.userName}>{profile.name}</Text>
+            <Text className={styles.userBio}>{profile.bio}</Text>
+            <Text className={styles.userLocation}>📍 {profile.location}</Text>
             <View className={styles.levelBadge}>
-              <Text>Lv.{userProfile.level} 骑行达人</Text>
+              <Text>Lv.{profile.level} 骑行达人</Text>
             </View>
           </View>
         </View>
@@ -131,19 +124,19 @@ const ProfilePage: React.FC = () => {
       {/* 总统计概览 */}
       <View className={styles.statsOverview}>
         <View className={styles.statItem}>
-          <Text className={styles.statValue}>{userProfile.totalDistance.toFixed(0)} km</Text>
+          <Text className={styles.statValue}>{profile.totalDistance.toFixed(0)} km</Text>
           <Text className={styles.statLabel}>总里程</Text>
         </View>
         <View className={styles.statItem}>
-          <Text className={styles.statValue}>{userProfile.totalRides}</Text>
+          <Text className={styles.statValue}>{profile.totalRides}</Text>
           <Text className={styles.statLabel}>骑行次数</Text>
         </View>
         <View className={styles.statItem}>
-          <Text className={styles.statValue}>{(userProfile.totalDuration / 3600).toFixed(0)} h</Text>
+          <Text className={styles.statValue}>{(profile.totalDuration / 3600).toFixed(0)} h</Text>
           <Text className={styles.statLabel}>总时长</Text>
         </View>
         <View className={styles.statItem}>
-          <Text className={styles.statValue}>{userProfile.totalElevation.toFixed(0)} m</Text>
+          <Text className={styles.statValue}>{profile.totalElevation.toFixed(0)} m</Text>
           <Text className={styles.statLabel}>累计爬升</Text>
         </View>
       </View>
@@ -189,7 +182,7 @@ const ProfilePage: React.FC = () => {
         <View className={styles.badgesCard}>
           <Text className={styles.badgesTitle}>我的徽章</Text>
           <View className={styles.badgesList}>
-            {userProfile.badges.map((badge, index) => (
+            {profile.badges.map((badge, index) => (
               <View key={index} className={styles.badgeItem}>
                 <View className={styles.badgeIcon}>🏆</View>
                 <Text className={styles.badgeName}>{badge}</Text>
@@ -225,6 +218,61 @@ const ProfilePage: React.FC = () => {
               <Text className={styles.menuArrow}>›</Text>
             </View>
           ))}
+        </View>
+      </View>
+
+      {/* 数据导出 */}
+      <View className={styles.section}>
+        <Text className={styles.sectionTitle}>数据导出</Text>
+        <View className={styles.menuList}>
+          <View 
+            className={styles.menuItem}
+            onClick={() => handleExport('gpx')}
+          >
+            <View 
+              className={styles.menuIcon}
+              style={{ backgroundColor: '#3b82f615', color: '#3b82f6' }}
+            >
+              📄
+            </View>
+            <View className={styles.menuContent}>
+              <Text className={styles.menuLabel}>导出 GPX</Text>
+              <Text className={styles.menuDesc}>GPS 轨迹格式，支持导入其他运动 App</Text>
+            </View>
+            <Text className={styles.menuArrow}>›</Text>
+          </View>
+          <View 
+            className={styles.menuItem}
+            onClick={() => handleExport('csv')}
+          >
+            <View 
+              className={styles.menuIcon}
+              style={{ backgroundColor: '#07c16015', color: '#07c160' }}
+            >
+              📊
+            </View>
+            <View className={styles.menuContent}>
+              <Text className={styles.menuLabel}>导出 CSV</Text>
+              <Text className={styles.menuDesc}>表格格式，适合数据分析</Text>
+            </View>
+            <Text className={styles.menuArrow}>›</Text>
+          </View>
+          <View 
+            className={styles.menuItem}
+            onClick={() => handleExport('json')}
+          >
+            <View 
+              className={styles.menuIcon}
+              style={{ backgroundColor: '#f59e0b15', color: '#f59e0b' }}
+            >
+              📋
+            </View>
+            <View className={styles.menuContent}>
+              <Text className={styles.menuLabel}>导出 JSON</Text>
+              <Text className={styles.menuDesc}>结构化数据，开发者友好</Text>
+            </View>
+            <Text className={styles.menuArrow}>›</Text>
+          </View>
         </View>
       </View>
     </ScrollView>

@@ -1,33 +1,31 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { View, Text, Image, Button, ScrollView } from '@tarojs/components';
 import Taro, { useRouter } from '@tarojs/taro';
 import styles from './index.module.scss';
-import { mockRoutes } from '../../data/routes';
-import type { Route } from '../../types/route';
+import { useRouteStore } from '../../store/routeStore';
 import { formatDistance, formatDurationShort, getDifficultyLabel, getDifficultyColor, getSceneryLabel, getSupplyPointLabel, getDangerSectionLabel } from '../../utils/format';
 import classnames from 'classnames';
 
 const RouteDetailPage: React.FC = () => {
   const router = useRouter();
   const routeId = router.params.id;
-  const [route, setRoute] = useState<Route | null>(null);
+  const { routes, toggleFavorite, initRoutes } = useRouteStore();
 
   useEffect(() => {
-    const foundRoute = mockRoutes.find(r => r.id === routeId);
-    if (foundRoute) {
-      setRoute(foundRoute);
-    }
-  }, [routeId]);
+    initRoutes();
+  }, [initRoutes]);
+
+  const route = useMemo(() => {
+    if (!routeId) return null;
+    return routes.find(r => r.id === routeId) || null;
+  }, [routes, routeId]);
 
   const handleFavorite = () => {
-    if (!route) return;
-    setRoute({
-      ...route,
-      isFavorite: !route.isFavorite,
-      likes: route.isFavorite ? route.likes - 1 : route.likes + 1
-    });
+    if (!route || !routeId) return;
+    const wasFavorite = route.isFavorite;
+    toggleFavorite(routeId);
     Taro.showToast({
-      title: route.isFavorite ? '已取消收藏' : '收藏成功',
+      title: wasFavorite ? '已取消收藏' : '收藏成功',
       icon: 'none'
     });
   };

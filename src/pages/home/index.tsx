@@ -4,28 +4,24 @@ import Taro from '@tarojs/taro';
 import styles from './index.module.scss';
 import RouteCard from '../../components/RouteCard';
 import StatCard from '../../components/StatCard';
-import { mockRoutes } from '../../data/routes';
-import { mockMonthlyStats } from '../../data/rides';
+import { useRouteStore } from '../../store/routeStore';
+import { useRideStore } from '../../store/rideStore';
 import type { Route } from '../../types/route';
-import { formatDistance, formatDurationShort } from '../../utils/format';
 import classnames from 'classnames';
 
 const HomePage: React.FC = () => {
-  const [recommendedRoutes, setRecommendedRoutes] = useState<Route[]>([]);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const { routes, toggleFavorite } = useRouteStore();
+  const { monthlyStats } = useRideStore();
 
   useEffect(() => {
-    loadData();
   }, []);
 
-  const loadData = () => {
-    setRecommendedRoutes(mockRoutes.slice(0, 3));
-  };
+  const recommendedRoutes = routes.slice(0, 3);
 
   const onPullDownRefresh = () => {
     setIsRefreshing(true);
     setTimeout(() => {
-      loadData();
       setIsRefreshing(false);
       Taro.stopPullDownRefresh();
     }, 1000);
@@ -38,8 +34,8 @@ const HomePage: React.FC = () => {
   };
 
   const handlePlanRoute = () => {
-    Taro.switchTab({
-      url: '/pages/routes/index'
+    Taro.navigateTo({
+      url: '/pages/plan-route/index'
     });
   };
 
@@ -56,13 +52,7 @@ const HomePage: React.FC = () => {
   };
 
   const handleFavorite = (id: string) => {
-    setRecommendedRoutes(prev => 
-      prev.map(route => 
-        route.id === id 
-          ? { ...route, isFavorite: !route.isFavorite, likes: route.isFavorite ? route.likes - 1 : route.likes + 1 }
-          : route
-      )
-    );
+    toggleFavorite(id);
     Taro.showToast({
       title: '收藏状态已更新',
       icon: 'none'
@@ -132,14 +122,14 @@ const HomePage: React.FC = () => {
         <View className={styles.statsRow}>
           <View className={styles.statCard}>
             <StatCard 
-              value={mockMonthlyStats.totalDistance.toFixed(1) + ' km'} 
+              value={monthlyStats.totalDistance.toFixed(1) + ' km'} 
               label="总里程"
               color="#07c160"
             />
           </View>
           <View className={styles.statCard}>
             <StatCard 
-              value={mockMonthlyStats.totalRides + ' 次'} 
+              value={monthlyStats.totalRides + ' 次'} 
               label="骑行次数"
               color="#3b82f6"
             />
@@ -148,14 +138,14 @@ const HomePage: React.FC = () => {
         <View className={styles.statsRow}>
           <View className={styles.statCard}>
             <StatCard 
-              value={mockMonthlyStats.totalElevation + ' m'} 
+              value={monthlyStats.totalElevation + ' m'} 
               label="累计爬升"
               color="#f59e0b"
             />
           </View>
           <View className={styles.statCard}>
             <StatCard 
-              value={mockMonthlyStats.avgSpeed.toFixed(1) + ' km/h'} 
+              value={monthlyStats.avgSpeed.toFixed(1) + ' km/h'} 
               label="平均速度"
               color="#8b5cf6"
             />

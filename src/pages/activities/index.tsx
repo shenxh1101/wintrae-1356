@@ -3,43 +3,40 @@ import { View, Text, ScrollView, Button } from '@tarojs/components';
 import Taro from '@tarojs/taro';
 import styles from './index.module.scss';
 import ActivityCard from '../../components/ActivityCard';
-import { mockActivities } from '../../data/activities';
-import type { Activity } from '../../types/activity';
+import { useActivityStore } from '../../store/activityStore';
+import { mockUserProfile } from '../../data/user';
 import classnames from 'classnames';
 
 type ActivityTab = 'upcoming' | 'joined' | 'organized';
 
 const ActivitiesPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<ActivityTab>('upcoming');
-  const [activities, setActivities] = useState<Activity[]>([]);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const { activities, initActivities, joinActivity, leaveActivity, hasJoined } = useActivityStore();
 
   useEffect(() => {
-    loadActivities();
+    initActivities();
   }, []);
-
-  const loadActivities = () => {
-    setActivities(mockActivities);
-  };
 
   const onPullDownRefresh = () => {
     setIsRefreshing(true);
     setTimeout(() => {
-      loadActivities();
+      initActivities();
       setIsRefreshing(false);
       Taro.stopPullDownRefresh();
     }, 1000);
   };
 
+  const currentUserId = mockUserProfile.id;
   const filteredActivities = activities.filter(activity => {
     if (activeTab === 'upcoming') {
       return activity.status === 'upcoming';
     }
     if (activeTab === 'joined') {
-      return activity.participants.some(p => p.id === 'u1');
+      return activity.participants.some(p => p.id === currentUserId);
     }
     if (activeTab === 'organized') {
-      return activity.organizer.id === 'u1';
+      return activity.organizer.id === currentUserId;
     }
     return true;
   });
